@@ -15,7 +15,7 @@ Things the original brief didn't list but most production SaaS apps need. Propos
 - **AI features** — Laravel 13's first-party AI SDK (summaries, smart search with embeddings + pgvector). Keep provider keys server-side and queue the calls.
 
 ## Engineering
-- **CI pipeline** — GitHub Actions (`assets/.github/workflows/ci.yml`): Pint, Larastan, Pest (parallel), browser tests, `npm run types`, `npm run build`, `composer audit`, `npm audit`; build & push Docker image on `main`.
+- **CI pipeline** — GitHub Actions (`laravel-deployment/assets/.github/workflows/ci.yml`): Pint, Larastan, Pest (parallel), browser tests, `npm run types`, `npm run build`, `composer audit`, `npm audit`; build & push Docker image on `main`.
 - **Static analysis & refactoring** — Larastan (level 6+), Rector with Laravel rules, Pint, ESLint + Prettier, TypeScript strict.
 - **Laravel Boost / MCP** — install `laravel/boost` in the project so AI agents get version-correct docs and app introspection (routes, schema, logs). Strongly recommended for agent-driven development.
 - **Error tracking & observability** — Sentry or Flare, Laravel Pulse/Nightwatch, structured JSON logs to stdout.

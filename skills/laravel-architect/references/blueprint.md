@@ -126,6 +126,8 @@ Rules of thumb to state in the blueprint:
 
 ## Tech stack map template
 
+Example for an Inertia + React SaaS — swap rows according to `decision-matrix.md` (Livewire + Flux, Vue, API-only, no Filament, Mollie instead of Stripe…).
+
 | Concern | Tool | Notes |
 |---|---|---|
 | Customer app UI | Inertia v3 + React 19 + TS + Tailwind v4 + shadcn/ui | SPA feel, server-side routing |
