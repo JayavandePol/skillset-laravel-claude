@@ -1,0 +1,99 @@
+# Production stack for Dokploy (Compose app) or a plain Docker host behind Nginx Proxy Manager.
+# Secrets come from the platform's environment settings / an .env file that is NOT committed.
+
+x-app: &app
+  image: ${APP_IMAGE:-ghcr.io/your-org/your-app:latest}
+  restart: unless-stopped
+  env_file: .env
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  networks: [internal]
+
+services:
+  app:
+    <<: *app
+    environment:
+      # serversideup/php: run migrations + optimize once, on the web container only
+      AUTORUN_ENABLED: "true"
+      AUTORUN_LARAVEL_MIGRATION: "true"
+      PHP_OPCACHE_ENABLE: "1"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/up"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks: [internal, proxy]
+    # Dokploy: attach the domain to this service, port 8080.
+    # Nginx Proxy Manager: proxy host -> app:8080 on the shared "proxy" network.
+
+  worker:
+    <<: *app
+    command: ["php", "/var/www/html/artisan", "horizon"]
+    stop_signal: SIGTERM
+    healthcheck:
+      test: ["CMD", "php", "/var/www/html/artisan", "horizon:status"]
+      interval: 60s
+
+  scheduler:
+    <<: *app
+    command: ["php", "/var/www/html/artisan", "schedule:work"]
+
+  ssr:
+    <<: *app
+    command: ["php", "/var/www/html/artisan", "inertia:start-ssr"]
+    # Set INERTIA_SSR_URL=http://ssr:13714 in .env for the app container.
+
+  reverb:
+    <<: *app
+    command: ["php", "/var/www/html/artisan", "reverb:start", "--host=0.0.0.0", "--port=8080"]
+    networks: [internal, proxy]
+    # Separate domain (e.g. ws.example.com) with websockets enabled at the proxy.
+
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes: [postgres-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
+      interval: 10s
+      retries: 5
+    networks: [internal]
+
+  redis:
+    image: valkey/valkey:8-alpine
+    restart: unless-stopped
+    command: ["valkey-server", "--appendonly", "yes"]
+    volumes: [redis-data:/data]
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      retries: 5
+    networks: [internal]
+
+  minio:
+    image: minio/minio:latest   # pin a release tag in real deployments
+    restart: unless-stopped
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+    volumes: [minio-data:/data]
+    networks: [internal]
+
+volumes:
+  postgres-data:
+  redis-data:
+  minio-data:
+
+networks:
+  internal:
+  proxy:
+    external: true   # Dokploy: "dokploy-network"; NPM: the network NPM is attached to
+    name: ${PROXY_NETWORK:-proxy}

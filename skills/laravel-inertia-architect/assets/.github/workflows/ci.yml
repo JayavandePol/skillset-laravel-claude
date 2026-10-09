@@ -1,0 +1,63 @@
+# Template CI for Laravel 13 + Inertia (React). Copy to .github/workflows/ci.yml in the project.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: testing
+          POSTGRES_USER: testing
+          POSTGRES_PASSWORD: testing
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U testing" --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_DATABASE: testing
+      DB_USERNAME: testing
+      DB_PASSWORD: testing
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: intl, gd, exif, bcmath, pdo_pgsql, redis
+          coverage: none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - run: composer install --no-interaction --prefer-dist
+      - run: npm ci
+      - run: cp .env.example .env && php artisan key:generate
+
+      - name: Code style
+        run: ./vendor/bin/pint --test
+      - name: Static analysis
+        run: ./vendor/bin/phpstan analyse --no-progress
+      - name: TypeScript & lint
+        run: npm run types && npm run lint
+      - name: Build assets
+        run: npm run build
+      - name: Security audit
+        run: composer audit && npm audit --omit=dev --audit-level=high
+
+      - name: Tests
+        run: ./vendor/bin/pest --parallel tests/Unit tests/Feature
+
+      - name: Browser tests
+        run: |
+          npx playwright install --with-deps chromium
+          ./vendor/bin/pest tests/Browser
