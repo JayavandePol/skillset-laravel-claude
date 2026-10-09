@@ -1,24 +1,42 @@
 # skillset-laravel-claude
 
-A Claude Code skill (packaged as a plugin) that turns Claude into a **Lead Full-Stack Laravel Architect + Principal Product Manager**. It plans, builds and verifies complete **Laravel 13 + Inertia.js (React) + Tailwind** apps with **Filament** and the **Spatie** ecosystem, including "remakes" of existing SaaS products (Trello, Teamleader, …).
+A complete **Laravel skill library for Claude Code**, packaged as one plugin. Install it once and every Laravel project gets the same architecture, coding standards, security rules, testing protocol and deployment setup, with every rule numbered so reviews and audits can cite it.
 
-## What it does
+It works for new projects (including "remakes" of existing SaaS products such as Trello or Teamleader) and existing ones (audit → fix plan → enforcement).
 
-Claude works in gated phases and checks the current official docs before planning:
+## What's inside
 
-| Phase | Output |
-|---|---|
-| 0. Blueprint & teardown | Researches the target SaaS, then writes epics, user stories, a Mermaid ERD, a tech stack map and open decisions. **Waits for your approval.** |
-| 1. Architecture & routing | Actions / Services / query objects, route and middleware design, quality gates |
-| 2. Database | Migrations with indexes and FK strategies, Eloquent models, tenancy scope, N+1 prevention |
-| 3. Frontend | React + Inertia v3 structure, typed props (Wayfinder), state strategy, partial reloads, deferred props, SSR |
-| 4. Validation & security | Form Requests, React Hook Form + Zod bridged to Inertia errors, Policies, CSP, rate limiting |
-| 5. Packages | Filament v5 admin panel, Spatie Permission (teams = workspaces), Spatie Media Library |
-| 6. UI verification | Boot commands, browser checklist (console, network, React DevTools), Pest browser tests / Dusk |
-| 7. Performance & deploy | Queues + Horizon, Docker image, Dokploy / Nginx Proxy Manager, deploy checklist |
-| + Extras | Realtime (Reverb), audit log, search, i18n (NL/EN), billing (Mollie/Stripe), CI, backups, GDPR |
+### Skills
 
-Progress is stored in the target project (`docs/blueprint.md`, `docs/progress.md`) so work can continue across sessions.
+| Skill | What it covers | Rule IDs |
+|---|---|---|
+| `laravel-architect` | **Entry point.** Architect + PM workflow: research → blueprint (epics, ERD, stack map) → **approval** → phased, vertical delivery. SaaS teardown protocol, stack decision matrix, extras. | — |
+| `laravel-standards` | Clean code & architecture: Actions, Services, DTOs, enums, thin controllers, config/env, naming, errors/logging, tooling (Pint, Larastan, Rector, Pest arch tests) | STD-* |
+| `laravel-security` | Validation, authorization, tenant isolation, XSS/SQLi/SSRF, CSRF & cookies, headers/CSP, auth hardening, uploads, rate limits, webhooks, GDPR/AVG, OWASP checklist | SEC-* |
+| `laravel-database` | Schema/ERD, migrations with FK strategies & indexes, zero-downtime changes, Eloquent, multi-tenancy, N+1, factories/seeders, PostgreSQL vs MariaDB | DB-* |
+| `laravel-auth` | Starter kits (React/Vue/Svelte/Livewire, WorkOS), Fortify, 2FA/passkeys, **Breeze & Jetstream (legacy)**, Sanctum, Passport, Socialite, invitations/teams | AUTH-* |
+| `laravel-inertia` | Inertia v3 with React 19 / Vue 3 / Svelte 5: structure, typed props, Wayfinder, state, partial/deferred props, forms (useForm, RHF + Zod, Precognition), optimistic UI, realtime, SSR | FE-* |
+| `laravel-livewire` | Livewire 4 + Flux: single-file components, islands, secure public properties, forms, testing, upgrades | LW-* |
+| `laravel-api` | Versioned REST/JSON:API, resources, error format, Sanctum abilities, pagination/filters, idempotency, webhooks, Scramble docs | API-* |
+| `laravel-filament` | **Optional** Filament v5 admin panels: access control, resources, actions, tenancy, Spatie plugins, tests | FIL-* |
+| `laravel-spatie` | Permission (teams), Media Library, Activitylog, Backup, Health, Data + TypeScript, Query Builder, CSP, Honeypot, Translatable, Sluggable, Tags, Settings, Model States, Webhooks, PDF… | SPA-* |
+| `laravel-ecosystem` | Queues/Horizon, scheduler, Reverb, Scout, Pennant, Cashier/Paddle/**Mollie**, mail & notifications, Octane, Pulse, Telescope, Nightwatch, Herd/Sail, **Boost**, Laravel 13 AI SDK | ECO-* |
+| `laravel-testing` | Pest 4+ (unit, feature, arch, browser), Dusk, Inertia/Livewire/Filament/API tests, fakes, boot commands, manual browser verification checklist | TST-* |
+| `laravel-deployment` | Docker (serversideup/php), compose roles, **Dokploy**, **Nginx Proxy Manager**, Traefik, Forge, Laravel Cloud, shared hosting, CI/CD, go-live checklist | DEP-* |
+| `laravel-audit` | Audits an existing project: bundled **static scanner** (`scripts/audit.php`) + manual checklist → prioritised report with rule IDs → fix plan | — |
+
+### Agents
+
+- **`laravel-reviewer`** reviews a diff, branch or PR against the rules, runs Pint/Larastan/tests, and returns a findings table and a verdict.
+- **`laravel-security-auditor`** runs a read-only security audit: a route authorization matrix, tenant isolation, injection and XSS sinks, auth hardening, and an OWASP status.
+
+### Hook
+
+- **Pint on save:** after Claude edits a `.php` file in a Laravel project, the project's own `vendor/bin/pint` formats it. It does nothing outside Laravel projects, when Pint isn't installed, or when `php` isn't on the hook shell's PATH. Turn it off with `LARAVEL_SKILLS_NO_PINT=1`.
+
+### Templates (assets)
+
+`pint.json`, `phpstan.neon` (level 8), `rector.php`, `tests/ArchTest.php` (rules as tests), composer `check` scripts, `.editorconfig`, a project `CLAUDE.md` template, a `SecurityHeaders` middleware, a CSP preset, rate limiters, a Dockerfile, `docker-compose.prod.yml` (web, worker, scheduler, SSR, Reverb, Postgres, Valkey, MinIO), a GitHub Actions CI workflow, and Pest browser smoke and workflow tests.
 
 ## Install
 
@@ -28,48 +46,51 @@ In Claude Code:
 
 ```
 /plugin marketplace add JayavandePol/skillset-laravel-claude
-/plugin install laravel-inertia-architect@skillset-laravel-claude
+/plugin install laravel-skillset@skillset-laravel-claude
 ```
 
-### As a plain skill
-
-Copy the skill folder into your personal skills directory:
+### As plain skills
 
 ```bash
 git clone https://github.com/JayavandePol/skillset-laravel-claude.git
-cp -r skillset-laravel-claude/skills/laravel-inertia-architect ~/.claude/skills/
+cp -r skillset-laravel-claude/skills/* ~/.claude/skills/
 ```
 
-(On Windows: `%USERPROFILE%\.claude\skills\`.) Or copy it into a project's `.claude/skills/` to share it with your team through git.
+(On Windows: `%USERPROFILE%\.claude\skills\`.) You can also copy them into a project's `.claude/skills/` to share them with your team through git. Agents and the hook only come with the plugin install.
 
 ## Usage
 
-The skill triggers automatically on Laravel/Inertia project requests, or call it directly:
+The skills trigger automatically based on what you ask. Typical starts:
 
 ```
-/laravel-inertia-architect Build a Trello remake for our agency, Dutch + English UI
+/laravel-architect Build a Trello remake for our agency, Dutch + English UI, self-hosted on Dokploy
+/laravel-architect Teamleader-like CRM with quotations and invoices for Belgian clients, Livewire + Filament
+/laravel-audit Audit this project and give me a fix plan
 ```
 
-Example prompts:
+Other examples:
 
-- "Make a Teamleader-like CRM with quotations and invoices for Belgian clients."
-- "Plan the database for a booking SaaS like Calendly in Laravel."
-- "Add a Filament admin panel and workspace roles to this Laravel React app."
-- "Prepare this Laravel app for deployment on Dokploy."
+- "Add workspace roles with Spatie Permission teams to this app."
+- "Should I use Breeze, Jetstream or the new starter kit for this?"
+- "Make an API for our mobile app with Sanctum tokens."
+- "Prepare this app for production on Dokploy behind Nginx Proxy Manager."
+- "Review my changes before I merge." (uses the `laravel-reviewer` agent)
 
-## Structure
+### Audit script in CI
 
-```
-.claude-plugin/                 plugin + marketplace manifests
-skills/laravel-inertia-architect/
-├── SKILL.md                    workflow, phase gating, defaults
-├── references/                 one file per phase + research protocol + extras
-└── assets/                     Dockerfile, compose, Action, CSP policy, browser test, CI workflow
+```bash
+php path/to/skills/laravel-audit/scripts/audit.php . --min=warning
 ```
 
-## Notes
+It exits with code 1 when it finds errors, so it can block a merge.
 
-Version numbers in the references were checked in October 2026. The skill tells Claude to re-verify against the official docs every time, and the installed versions in a project always take precedence.
+## Pairs well with Laravel Boost
+
+Install [`laravel/boost`](https://laravel.com/docs/boost) in each project (`composer require laravel/boost --dev && php artisan boost:install`). Boost gives Claude version-matched docs and app introspection over MCP. This library adds your rules, protocols and enforcement on top. If they disagree on an API detail, the installed version's docs win. If they disagree on policy (security, structure), the library wins.
+
+## Versions
+
+The references were checked in October 2026 against Laravel 13, Inertia v3, Livewire 4, Filament v5, Pest 4, Spatie Permission v7/v8 and Media Library 11.21+. Every skill tells Claude to check the official docs again before it uses an API, and the versions installed in a project always take precedence.
 
 ## License
 

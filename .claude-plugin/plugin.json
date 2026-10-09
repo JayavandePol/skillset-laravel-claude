@@ -1,11 +1,11 @@
 {
-  "name": "laravel-inertia-architect",
-  "description": "Lead Laravel architect + product manager skill: researches current docs, tears down SaaS apps for remakes, and plans/builds/tests Laravel 13 + Inertia (React) + Filament + Spatie apps in gated phases.",
-  "version": "1.0.0",
+  "name": "laravel-skillset",
+  "description": "Complete Laravel skill library: architect/PM workflow with SaaS teardowns, enforced coding standards, security, database, auth (starter kits, Fortify, Breeze/Jetstream legacy, Sanctum, Passport, Socialite), Inertia (React/Vue/Svelte), Livewire, APIs, Filament, Spatie, first-party ecosystem, testing, deployment and project audits — plus review/security agents and a Pint-on-save hook.",
+  "version": "2.0.0",
   "author": {
     "name": "JayavandePol"
   },
   "repository": "https://github.com/JayavandePol/skillset-laravel-claude",
   "license": "MIT",
-  "keywords": ["laravel", "inertia", "react", "filament", "spatie", "saas", "architecture", "docker"]
+  "keywords": ["laravel", "php", "inertia", "react", "vue", "livewire", "filament", "spatie", "fortify", "security", "testing", "docker", "dokploy"]
 }

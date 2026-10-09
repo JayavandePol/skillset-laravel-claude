@@ -5,9 +5,9 @@
   },
   "plugins": [
     {
-      "name": "laravel-inertia-architect",
+      "name": "laravel-skillset",
       "source": "./",
-      "description": "Phased Laravel 13 + Inertia/React + Filament + Spatie app planning, building and verification, including SaaS remake teardowns."
+      "description": "Complete Laravel skill library: architecture, standards, security, database, auth, Inertia, Livewire, API, Filament, Spatie, ecosystem, testing, deployment and audits."
     }
   ]
 }
