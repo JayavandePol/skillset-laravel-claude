@@ -23,7 +23,7 @@ It works for new projects (including "remakes" of existing SaaS products such as
 | `laravel-ecosystem` | Queues/Horizon, scheduler, Reverb, Scout, Pennant, Cashier/Paddle/**Mollie**, mail & notifications, Octane, Pulse, Telescope, Nightwatch, Herd/Sail, **Boost**, Laravel 13 AI SDK | ECO-* |
 | `laravel-testing` | Pest 4+ (unit, feature, arch, browser), Dusk, Inertia/Livewire/Filament/API tests, fakes, boot commands, manual browser verification checklist | TST-* |
 | `laravel-deployment` | Docker (serversideup/php), compose roles, **Dokploy**, **Nginx Proxy Manager**, Traefik, Forge, Laravel Cloud, shared hosting, CI/CD, go-live checklist | DEP-* |
-| `commit` | Commits (and pushes) in **your** personal style: no Co-Authored-By, no trailers, no AI mentions. Learns your style from your git history once, stores it in `~/.claude/commit-style.md` (per-repo override: `.claude/commit-style.md`), and updates it whenever you say "from now on…" | — |
+| `commit` | Commits (and pushes) in **your** personal style: no Co-Authored-By, no trailers, no AI mentions. **Commits as it goes** in small meaningful steps (never pushes on its own). Learns your style from your git history once, stores it in `~/.claude/commit-style.md` (per-repo override: `.claude/commit-style.md`), and updates it whenever you say "from now on…" | — |
 | `laravel-audit` | Audits an existing project: bundled **static scanner** (`scripts/audit.php`) + manual checklist → prioritised report with rule IDs → fix plan | — |
 
 ### Agents
