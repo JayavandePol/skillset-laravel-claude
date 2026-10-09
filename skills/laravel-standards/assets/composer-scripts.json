@@ -1,0 +1,17 @@
+{
+    "_comment": "Merge into the project's composer.json \"scripts\" section (STD-65).",
+    "scripts": {
+        "lint": "pint --parallel",
+        "lint:check": "pint --test",
+        "analyse": "phpstan analyse --memory-limit=1G --no-progress",
+        "refactor": "rector",
+        "refactor:check": "rector --dry-run",
+        "test": "@php artisan test --parallel",
+        "test:arch": "pest --filter=arch",
+        "check": [
+            "@lint:check",
+            "@analyse",
+            "@test"
+        ]
+    }
+}

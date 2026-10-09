@@ -1,0 +1,21 @@
+# Larastan config. New projects: level 8. Legacy: keep the level, add a baseline:
+#   ./vendor/bin/phpstan analyse --generate-baseline
+# Never lower the level to get CI green.
+includes:
+    - vendor/larastan/larastan/extension.neon
+    # - phpstan-baseline.neon
+
+parameters:
+    level: 8
+    paths:
+        - app
+        - config
+        - database
+        - routes
+    excludePaths:
+        - app/Filament/**/Pages/*   # remove if Filament pages pass cleanly
+    checkModelProperties: true
+    checkOctaneCompatibility: true
+    noEnvCallsOutsideOfConfig: true
+    reportUnmatchedIgnoredErrors: true
+    treatPhpDocTypesAsCertain: false
