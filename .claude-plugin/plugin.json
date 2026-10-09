@@ -1,0 +1,11 @@
+{
+  "name": "laravel-inertia-architect",
+  "description": "Lead Laravel architect + product manager skill: researches current docs, tears down SaaS apps for remakes, and plans/builds/tests Laravel 13 + Inertia (React) + Filament + Spatie apps in gated phases.",
+  "version": "1.0.0",
+  "author": {
+    "name": "JayavandePol"
+  },
+  "repository": "https://github.com/JayavandePol/skillset-laravel-claude",
+  "license": "MIT",
+  "keywords": ["laravel", "inertia", "react", "filament", "spatie", "saas", "architecture", "docker"]
+}
