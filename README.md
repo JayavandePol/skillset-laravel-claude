@@ -30,6 +30,7 @@ It works for new projects (including "remakes" of existing SaaS products such as
 
 - **`laravel-reviewer`** reviews a diff, branch or PR against the rules, runs Pint/Larastan/tests, and returns a findings table and a verdict.
 - **`laravel-security-auditor`** runs a read-only security audit: a route authorization matrix, tenant isolation, injection and XSS sinks, auth hardening, and an OWASP status.
+- **`laravel-security-breacher`** is the red-team counterpart: it tries to *disprove* the auditor by actually attacking an app you own (IDOR/cross-tenant, mass assignment, injection, CSRF/webhook forgery, uploads, SSRF). Authorized, scoped, non-destructive — a "fixed" finding only passes when a real exploit attempt fails.
 
 ### Hook
 
