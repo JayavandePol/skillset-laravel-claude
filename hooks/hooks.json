@@ -1,0 +1,17 @@
+{
+  "description": "Formats PHP files with the project's own Laravel Pint after Claude edits them (STD-60). No-op outside Laravel projects, when Pint isn't installed, when php isn't on PATH, or when LARAVEL_SKILLS_NO_PINT=1.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "command -v php >/dev/null 2>&1 && php \"${CLAUDE_PLUGIN_ROOT}/hooks/pint-format.php\" || true",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
