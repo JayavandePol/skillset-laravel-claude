@@ -22,9 +22,16 @@
 - Only when the subject can't carry it: breaking changes, migrations, new env vars, required steps elsewhere, non-obvious reasons.
 - A few short lines or `-` bullets; no paragraphs; no file-by-file lists.
 
+## Cadence
+- Commit as you go: after each finished step (a page created, a button added, a migration, an Action, a test), not one big commit at the end.
+- Several commits in one file is fine, e.g. page created, then filter added, then button added.
+- Not too much: skip typo/format tweaks (fold into the next commit), never commit knowingly broken code, no WIP commits. Roughly 1-4 files and a few dozen lines per commit.
+- Commit locally automatically; never push unless asked.
+<!-- Prefer fewer commits? Change to: "Commit once per finished feature, grouped by area." -->
+
 ## Splitting
-- Multiple commits over one big commit, grouped by area/feature (what the change is for), not by file type.
-- Don't over-split: related backend + frontend for one feature can be one commit.
+- Group by area/feature (what the change is for), not by file type.
+- Related backend + frontend for one small feature can be one commit.
 
 ## Trailers & attribution
 - None. No Co-Authored-By, no Signed-off-by, no "Generated with", no AI mentions, no emoji.
